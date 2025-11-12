@@ -1,10 +1,14 @@
 package net.ausiasmarch.persutil.api;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +23,8 @@ public class BlogApi {
 
     //inyectar servicio AleatorioServices
     @Autowired
-    AleatorioServices aleatorioServices;
+    AleatorioServices oAleatorioServices;
+
 
     @Autowired
     BlogService oBlogService;
@@ -54,22 +59,45 @@ public class BlogApi {
     public ResponseEntity<Integer> aleatorioUsandoServiceEnRango(
         @PathVariable int min,
         @PathVariable int max) {
-            int numeroAleatorio = aleatorioServices.GenerarNumeroAleatorioEnteroEnRango(min, max);
+            int numeroAleatorio = oAleatorioServices.GenerarNumeroAleatorioEnteroEnRango(min, max);
             return ResponseEntity.ok(numeroAleatorio);
     }
 
     @GetMapping("/palabras") //endpoint
     public ResponseEntity<net.ausiasmarch.persutil.entity.BlogEntity> obtenerPalabraAleatoria() {
-        String[] frase = aleatorioServices.generarFraseAleatoria();
+        String[] frase = oAleatorioServices.generarFraseAleatoria();
         net.ausiasmarch.persutil.entity.BlogEntity localBlog = new net.ausiasmarch.persutil.entity.BlogEntity();
         localBlog.setTitulo(frase[0] + " " + frase[1] + " " + frase[2] + " " + frase[3] + " " + frase[4]);
-        frase = aleatorioServices.generarFraseAleatoria();
+        frase = oAleatorioServices.generarFraseAleatoria();
         localBlog.setContenido(frase[0] + " " + frase[1] + " " + frase[2] + " " + frase[3] + " " + frase[4]);
-        frase = aleatorioServices.generarFraseAleatoria();
+        frase = oAleatorioServices.generarFraseAleatoria();
         localBlog.setEtiquetas(frase[0] + " " + frase[1] + " " + frase[2] + " " + frase[3] + " " + frase[4]);
         localBlog.setFechaCreacion(java.time.LocalDateTime.now());
         
         return new ResponseEntity<net.ausiasmarch.persutil.entity.BlogEntity>(localBlog, HttpStatus.OK);
+    }
+
+    @GetMapping("/rellenauno")
+    public ResponseEntity<Long> rellenaBlog() {
+        return ResponseEntity.ok(oBlogService.rellenaBlog());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BlogEntity> get (@PathVariable Long id) {
+        return ResponseEntity.ok(oBlogService.get(id));
+
+    }
+
+    //crear posts
+    @PostMapping("")
+    public ResponseEntity<Long> create(@RequestBody BlogEntity blogEntity) {
+        return ResponseEntity.ok(oBlogService.create(blogEntity));
+    }
+
+    //modificar posts
+    @PutMapping("")
+    public ResponseEntity<Long> update(@RequestBody BlogEntity blogEntity) {
+        return ResponseEntity.ok(oBlogService.update(blogEntity));
     }
 
 }
