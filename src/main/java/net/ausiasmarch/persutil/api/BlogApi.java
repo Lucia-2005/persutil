@@ -24,8 +24,6 @@ public class BlogApi {
     @Autowired
     BlogService oBlogService;
 
-    @Autowired
-    BlogEntity oBlogEntity;
 
   @GetMapping("/saludar")
     public ResponseEntity<String> saludar() {
@@ -61,14 +59,17 @@ public class BlogApi {
     }
 
     @GetMapping("/palabras") //endpoint
-    public ResponseEntity<String[]> obtenerPalabraAleatoria() {
+    public ResponseEntity<net.ausiasmarch.persutil.entity.BlogEntity> obtenerPalabraAleatoria() {
         String[] frase = aleatorioServices.generarFraseAleatoria();
-        oBlogEntity.setTitulo(frase[0] + " " + frase[1] + " " + frase[2] + " " + frase[3] + " " + frase[4]);
+        net.ausiasmarch.persutil.entity.BlogEntity localBlog = new net.ausiasmarch.persutil.entity.BlogEntity();
+        localBlog.setTitulo(frase[0] + " " + frase[1] + " " + frase[2] + " " + frase[3] + " " + frase[4]);
         frase = aleatorioServices.generarFraseAleatoria();
-        oBlogEntity.setContenido(frase[0] + " " + frase[1] + " " + frase[2] + " " + frase[3] + " " + frase[4]);
+        localBlog.setContenido(frase[0] + " " + frase[1] + " " + frase[2] + " " + frase[3] + " " + frase[4]);
         frase = aleatorioServices.generarFraseAleatoria();
-        oBlogEntity.setEtiquetas(frase[0] + " " + frase[1] + " " + frase[2] + " " + frase[3] + " " + frase[4]);
-        return new ResponseEntity<String[]>(frase, HttpStatus.OK);
+        localBlog.setEtiquetas(frase[0] + " " + frase[1] + " " + frase[2] + " " + frase[3] + " " + frase[4]);
+        localBlog.setFechaCreacion(java.time.LocalDateTime.now());
+        
+        return new ResponseEntity<net.ausiasmarch.persutil.entity.BlogEntity>(localBlog, HttpStatus.OK);
     }
 
 }
