@@ -2,8 +2,11 @@ package net.ausiasmarch.persutil.api;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -82,6 +85,13 @@ public class BlogApi {
         return ResponseEntity.ok(oBlogService.rellenaBlog());
     }
 
+   
+
+
+    // -------------------------------------------------------------------------------
+    //--------------------------------CRUD BLOG POSTS--------------------------------
+    // -------------------------------------------------------------------------------
+
     @GetMapping("/{id}")
     public ResponseEntity<BlogEntity> get (@PathVariable Long id) {
         return ResponseEntity.ok(oBlogService.get(id));
@@ -99,5 +109,17 @@ public class BlogApi {
     public ResponseEntity<Long> update(@RequestBody BlogEntity blogEntity) {
         return ResponseEntity.ok(oBlogService.update(blogEntity));
     }
+
+    @DeleteMapping("")
+    public ResponseEntity<Long> delete (@PathVariable Long id){
+        return ResponseEntity.ok(oBlogService.delete(id));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<Page<BlogEntity>> getPage(Pageable oPageable){
+        return ResponseEntity.ok(oBlogService.getPage(oPageable));
+    }
+
+
 
 }

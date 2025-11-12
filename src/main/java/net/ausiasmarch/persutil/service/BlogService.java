@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import net.ausiasmarch.persutil.entity.BlogEntity;
@@ -109,6 +111,15 @@ public class BlogService {
         existingBlog.setFechaModificacion(LocalDateTime.now());
         oBlogRepository.save(existingBlog);
         return existingBlog.getId();
+    }
+
+    public Long delete(Long id) {
+        oBlogRepository.deleteById(id);
+        return id;
+    }
+
+    public Page<BlogEntity> getPage(Pageable oPageable){
+        return oBlogRepository.findAll(oPageable);
     }
 
 }
