@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import net.ausiasmarch.persutil.entity.BlogEntity;
 import net.ausiasmarch.persutil.service.AleatorioServices;
 import net.ausiasmarch.persutil.service.BlogService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/blog")
 public class BlogApi {
